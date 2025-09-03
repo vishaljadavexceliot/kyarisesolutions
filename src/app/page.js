@@ -187,7 +187,7 @@ const Hero = () => {
       <div className="container mx-auto px-6 pt-16 sm:px-2 lg:px-8 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 mb-8 md:mb-0">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
-            Kickstart Your Digital Journey with My Freelance Solutions
+            Kickstart Your Digital Journey with Kyarise Solutions
           </h1>
           <p className="text-base sm:text-lg md:text-xl mb-8 text-gray-200">
             I’m a passionate freelancer offering affordable web development, UI/UX design, mobile apps, and custom dashboards to bring your ideas to life.
@@ -223,7 +223,7 @@ const Hero = () => {
             <div className="relative bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-2xl border border-gray-700 transform hover:scale-105 transition duration-300">
               <div className="flex justify-between items-center mb-6">
                 <div className="text-white">
-                  <div className="text-lg sm:text-xl font-bold">Freelance IT Solutions</div>
+                  <div className="text-lg sm:text-xl font-bold">Kyarise Solutions</div>
                   <div className="text-xs sm:text-sm text-gray-300">Turning Your Vision into Reality</div>
                 </div>
                 <div className="text-blue-400 font-bold text-md">
