@@ -1,3 +1,4 @@
+
 "use client";
 import { useEffect, useState } from 'react';
 
@@ -120,7 +121,7 @@ const Nav = ({ activeSection, setActiveSection }) => {
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden sm : space-x-16 md:flex space-x-6 lg:space-x-8">
+        <div className="hidden md:flex space-x-6 lg:space-x-8">
           {navItems.map((item) => (
             <button
               key={item}
@@ -142,7 +143,7 @@ const Nav = ({ activeSection, setActiveSection }) => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:hidden bg-gray-900 py-4 px-6 shadow-lg`}>
+      <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:hidden bg-gray-900 py-4 px-6 shadow-lg max-w-full overflow-x-hidden`}>
         <div className="flex flex-col space-y-3">
           {navItems.map((item) => (
             <button
@@ -215,7 +216,7 @@ const Hero = () => {
           </div>
         </div>
         <div className="md:w-1/2 flex justify-center">
-          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
+          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden">
             <div className="absolute -top-8 -left-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-blue-500 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob"></div>
             <div className="absolute -bottom-8 -right-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-green-500 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-2000"></div>
             <div className="absolute top-16 -right-10 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-4000"></div>
@@ -252,7 +253,7 @@ const Hero = () => {
                 </div>
               </div>
               <div className="flex justify-between items-center">
-                <div className="text-white text-xs sm:text-">
+                <div className="text-white text-xs sm:text-sm">
                   <div>Ready to launch your project?</div>
                   <div className="text-blue-400 font-medium">Get a free quote today</div>
                 </div>
@@ -285,8 +286,8 @@ const Services = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {services.map((service) => (
             <div key={service.id} className="bg-gray-800 rounded-3xl overflow-hidden shadow-xl card-hover border border-gray-600 transform hover:scale-105 transition duration-300">
-              <div className={`h-40 sm:h-48 bg-gradient-to-r ${service.color} flex items-center justify-center`}>
-                <img src={service.imageurl} alt={service.title} className="z-10 object-cover w-full h-full" />
+              <div className={`h-40 sm:h-48 bg-gradient-to-r ${service.color} flex items-center justify-center overflow-hidden`}>
+                <img src={service.imageurl} alt={service.title} className="z-10 object-cover w-full h-full max-w-full" />
               </div>
               <div className="p-4 sm:p-6">
                 <h3 className="text-lg sm:text-xl font-bold mb-3 text-gray-100">{service.title}</h3>
@@ -315,7 +316,7 @@ const About = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-8 md:mb-0">
-            <div className="relative">
+            <div className="relative overflow-hidden">
               <div className="absolute -top-8 -left-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-blue-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
               <div className="absolute -bottom-8 -right-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-green-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
               <div className="bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-xl max-w-md mx-auto border border-gray-600 relative z-10">
@@ -439,9 +440,9 @@ const Portfolio = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {portfolioItems.map((item) => (
             <div key={item.id} className="bg-gray-800 rounded-3xl overflow-hidden shadow-xl card-hover border border-gray-600 transform hover:scale-105 transition duration-300">
-              <div className="h-40 sm:h-48 bg-gradient-to-r from-gray-700 to-gray-800 flex items-center justify-center relative">
+              <div className="h-40 sm:h-48 bg-gradient-to-r from-gray-700 to-gray-800 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-blue-500 opacity-20"></div>
-                <img src={item.imageurl} alt={item.title} className="z-10 object-cover w-full h-full" />
+                <img src={item.imageurl} alt={item.title} className="z-10 object-cover w-full h-full max-w-full" />
               </div>
               <div className="p-4 sm:p-6">
                 <h3 className="text-lg sm:text-xl font-bold mb-2 text-gray-100">{item.title}</h3>
@@ -652,7 +653,6 @@ const Contact = () => {
                   >
                     <i className="fab fa-github text-md"></i>
                   </a>
-
                   <a
                     href="https://wa.me/919664757686"
                     target="_blank"
@@ -661,7 +661,6 @@ const Contact = () => {
                   >
                     <i className="fab fa-whatsapp text-md"></i>
                   </a>
-
                   <a
                     href="https://www.instagram.com/kyarisesolutions/"
                     target="_blank"
@@ -670,7 +669,6 @@ const Contact = () => {
                   >
                     <i className="fab fa-instagram text-md"></i>
                   </a>
-
                   <a
                     href="https://linkedin.com/vishaljadav"
                     target="_blank"
@@ -680,14 +678,12 @@ const Contact = () => {
                     <i className="fab fa-linkedin-in text-md"></i>
                   </a>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-
   );
 };
 
@@ -819,8 +815,14 @@ export default function Home() {
         body {
           font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
           background-color: #0f172a;
+          overflow-x: hidden;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+          max-width: 100%;
+          box-sizing: border-box;
         }
 
         .section-padding {
