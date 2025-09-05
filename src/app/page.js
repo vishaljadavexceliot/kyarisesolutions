@@ -66,7 +66,7 @@ const testimonials = [
   },
   {
     id: 2,
-    name: 'Diya Jadav',
+    name: 'Geeta Rajput',
     role: 'Blogger',
     content: 'The UI/UX design for my blog was amazing. The clean and modern design doubled my site’s engagement within weeks.',
     rating: 5,
