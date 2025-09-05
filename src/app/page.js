@@ -1,6 +1,6 @@
-
 "use client";
 import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion'; // Added Framer Motion import
 
 // Data for services
 const services = [
@@ -113,25 +113,58 @@ const Nav = ({ activeSection, setActiveSection }) => {
     }
   };
 
+  // Animation variants for nav items
+  const navItemVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+  };
+
+  // Animation variants for mobile menu
+  const mobileMenuVariants = {
+    hidden: { opacity: 0, height: 0 },
+    visible: { opacity: 1, height: 'auto', transition: { duration: 0.3 } },
+  };
+
   return (
-    <nav className="fixed w-full bg-gray-900 shadow-lg z-20 backdrop-blur-lg bg-opacity-95">
+    <motion.nav
+      className="fixed w-full bg-gray-900 shadow-lg z-20 backdrop-blur-lg bg-opacity-95"
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="container mx-auto px-6 sm:px-12 lg:px-8 py-3 flex justify-between items-center">
         <div className="flex items-center">
-          <img src="/logo.png" alt="Logo" className="h-12 w-32 sm:h-14 sm:w-36 mr-2" />
+          <motion.img
+            src="/logo.png"
+            alt="Logo"
+            className="h-12 w-32 sm:h-14 sm:w-36 mr-2"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          />
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-6 lg:space-x-8">
+        <motion.div
+          className="hidden md:flex space-x-6 lg:space-x-8"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+          }}
+        >
           {navItems.map((item) => (
-            <button
+            <motion.button
               key={item}
+              variants={navItemVariants}
               onClick={() => handleNavClick(item)}
               className={`text-gray-200 hover:text-blue-400 capitalize transition-colors duration-300 font-medium text-sm lg:text-base ${activeSection === item ? 'text-blue-400 border-b-2 border-blue-400' : ''}`}
             >
               {item}
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Mobile Navigation Button */}
         <button
@@ -143,20 +176,37 @@ const Nav = ({ activeSection, setActiveSection }) => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:hidden bg-gray-900 py-4 px-6 shadow-lg max-w-full overflow-x-hidden`}>
-        <div className="flex flex-col space-y-3">
-          {navItems.map((item) => (
-            <button
-              key={item}
-              onClick={() => handleNavClick(item)}
-              className={`text-gray-200 hover:text-blue-400 capitalize py-2 text-left transition-colors duration-300 font-medium text-sm ${activeSection === item ? 'text-blue-400 font-bold' : ''}`}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="md:hidden bg-gray-900 py-4 px-6 shadow-lg max-w-full overflow-x-hidden"
+            variants={mobileMenuVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+          >
+            <motion.div
+              className="flex flex-col space-y-3"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+              }}
             >
-              {item}
-            </button>
-          ))}
-        </div>
-      </div>
-    </nav>
+              {navItems.map((item) => (
+                <motion.button
+                  key={item}
+                  variants={navItemVariants}
+                  onClick={() => handleNavClick(item)}
+                  className={`text-gray-200 hover:text-blue-400 capitalize py-2 text-left transition-colors duration-300 font-medium text-sm ${activeSection === item ? 'text-blue-400 font-bold' : ''}`}
+                >
+                  {item}
+                </motion.button>
+              ))}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 };
 
@@ -172,8 +222,14 @@ const Hero = () => {
     }
   };
 
+  // Animation variants for hero content
+  const heroVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  };
+
   return (
-    <section
+    <motion.section
       id="home"
       className="hero-bg text-white section-padding pt-20 sm:pt-24 pb-12"
       style={{
@@ -183,23 +239,49 @@ const Hero = () => {
         width: '100%',
         minHeight: '100vh',
       }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
     >
       <div className="container mx-auto px-6 pt-16 sm:px-2 lg:px-8 flex flex-col md:flex-row items-center">
-        <div className="md:w-1/2 mb-8 md:mb-0">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
+        <motion.div
+          className="md:w-1/2 mb-8 md:mb-0"
+          variants={heroVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.h1
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight tracking-tight"
+            variants={heroVariants}
+          >
             Kickstart Your Digital Journey with Kyarise Solutions
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl mb-8 text-gray-200">
+          </motion.h1>
+          <motion.p
+            className="text-base sm:text-lg md:text-xl mb-8 text-gray-200"
+            variants={heroVariants}
+          >
             I’m a passionate freelancer offering affordable web development, UI/UX design, mobile apps, and custom dashboards to bring your ideas to life.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
+          </motion.p>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+            }}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.button
+              variants={heroVariants}
               onClick={scrollToServices}
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 sm:px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg text-md"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
             >
               Explore Services
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              variants={heroVariants}
               onClick={() => {
                 const element = document.getElementById('contact');
                 if (element) {
@@ -210,17 +292,28 @@ const Hero = () => {
                 }
               }}
               className="bg-transparent hover:bg-gray-800 text-white font-semibold py-3 px-6 sm:px-8 rounded-full border border-gray-200 hover:border-blue-500 transition duration-300 shadow-lg text-md"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
             >
               Contact Me
-            </button>
-          </div>
-        </div>
-        <div className="md:w-1/2 flex justify-center">
+            </motion.button>
+          </motion.div>
+        </motion.div>
+        <motion.div
+          className="md:w-1/2 flex justify-center"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden">
             <div className="absolute -top-8 -left-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-blue-500 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob"></div>
             <div className="absolute -bottom-8 -right-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-green-500 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-2000"></div>
             <div className="absolute top-16 -right-10 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-4000"></div>
-            <div className="relative bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-2xl border border-gray-700 transform hover:scale-105 transition duration-300">
+            <motion.div
+              className="relative bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-2xl border border-gray-700 transform hover:scale-105 transition duration-300"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+            >
               <div className="flex justify-between items-center mb-6">
                 <div className="text-white">
                   <div className="text-lg sm:text-xl font-bold">Kyarise Solutions</div>
@@ -230,42 +323,72 @@ const Hero = () => {
                   <i className="fas fa-rocket mr-1"></i> Start Now
                 </div>
               </div>
-              <div className="bg-gray-900 p-4 sm:p-6 rounded-2xl mb-6">
+              <motion.div
+                className="bg-gray-900 p-4 sm:p-6 rounded-2xl mb-6"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+                }}
+                initial="hidden"
+                animate="visible"
+              >
                 <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                  <div className="bg-blue-700 p-3 sm:p-4 rounded-lg flex items-center justify-center">
+                  <motion.div
+                    variants={heroVariants}
+                    className="bg-blue-700 p-3 sm:p-4 rounded-lg flex items-center justify-center"
+                  >
                     <i className="fas fa-code text-blue-300 text-lg sm:text-2xl"></i>
-                  </div>
-                  <div className="bg-purple-700 p-3 sm:p-4 rounded-lg flex items-center justify-center">
+                  </motion.div>
+                  <motion.div
+                    variants={heroVariants}
+                    className="bg-purple-700 p-3 sm:p-4 rounded-lg flex items-center justify-center"
+                  >
                     <i className="fas fa-palette text-purple-300 text-lg sm:text-2xl"></i>
-                  </div>
-                  <div className="bg-green-700 p-3 sm:p-4 rounded-lg flex items-center justify-center">
+                  </motion.div>
+                  <motion.div
+                    variants={heroVariants}
+                    className="bg-green-700 p-3 sm:p-4 rounded-lg flex items-center justify-center"
+                  >
                     <i className="fas fa-mobile-alt text-green-300 text-lg sm:text-2xl"></i>
-                  </div>
-                  <div className="bg-red-700 p-3 sm:p-4 rounded-lg flex items-center justify-center">
+                  </motion.div>
+                  <motion.div
+                    variants={heroVariants}
+                    className="bg-red-700 p-3 sm:p-4 rounded-lg flex items-center justify-center"
+                  >
                     <i className="fas fa-film text-red-300 text-lg sm:text-2xl"></i>
-                  </div>
-                  <div className="bg-indigo-700 p-3 sm:p-4 rounded-lg flex items-center justify-center">
+                  </motion.div>
+                  <motion.div
+                    variants={heroVariants}
+                    className="bg-indigo-700 p-3 sm:p-4 rounded-lg flex items-center justify-center"
+                  >
                     <i className="fas fa-tachometer-alt text-indigo-300 text-lg sm:text-2xl"></i>
-                  </div>
-                  <div className="bg-teal-700 p-3 sm:p-4 rounded-lg flex items-center justify-center">
+                  </motion.div>
+                  <motion.div
+                    variants={heroVariants}
+                    className="bg-teal-700 p-3 sm:p-4 rounded-lg flex items-center justify-center"
+                  >
                     <i className="fas fa-cloud text-teal-300 text-lg sm:text-2xl"></i>
-                  </div>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
               <div className="flex justify-between items-center">
                 <div className="text-white text-xs sm:text-sm">
                   <div>Ready to launch your project?</div>
                   <div className="text-blue-400 font-medium">Get a free quote today</div>
                 </div>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-full cursor-pointer transition duration-300 text-sm">
+                <motion.button
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-full cursor-pointer transition duration-300 text-sm"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <i className="fas fa-arrow-right"></i>
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -274,18 +397,50 @@ const Services = () => {
   const handleInquiry = (service) => {
   };
 
+  // Animation variants for service cards
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
-    <section id="services" className="bg-gray-900 section-padding pt-12 pb-12">
+    <motion.section
+      id="services"
+      className="bg-gray-900 section-padding pt-12 pb-12"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 sm:mb-16">
+        <motion.div
+          className="text-center mb-12 sm:mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 text-blue-400">My Services</h2>
           <p className="text-gray-300 max-w-3xl mx-auto text-base sm:text-lg md:text-xl">
             As a freelancer, I provide tailored IT solutions to help you establish a strong online presence with affordable and high-quality services.
           </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        </motion.div>
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+          }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {services.map((service) => (
-            <div key={service.id} className="bg-gray-800 rounded-3xl overflow-hidden shadow-xl card-hover border border-gray-600 transform hover:scale-105 transition duration-300">
+            <motion.div
+              key={service.id}
+              variants={cardVariants}
+              className="bg-gray-800 rounded-3xl overflow-hidden shadow-xl card-hover border border-gray-600 transform hover:scale-105 transition duration-300"
+            >
               <div className={`h-40 sm:h-48 bg-gradient-to-r ${service.color} flex items-center justify-center overflow-hidden`}>
                 <img src={service.imageurl} alt={service.title} className="z-10 object-cover w-full h-full max-w-full" />
               </div>
@@ -293,36 +448,69 @@ const Services = () => {
                 <h3 className="text-lg sm:text-xl font-bold mb-3 text-gray-100">{service.title}</h3>
                 <p className="text-gray-300 mb-4 text-md">{service.description}</p>
                 <div className="flex justify-between items-center mt-4 sm:mt-6">
-                  <button
+                  <motion.button
                     onClick={() => handleInquiry(service)}
                     className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full transition duration-300 text-md"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     Inquire Now
-                  </button>
+                  </motion.button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
 // About Section
 const About = () => {
+  // Animation variants for about content
+  const aboutVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+  };
+
   return (
-    <section id="about" className="bg-gray-950 section-padding pt-12 pb-12">
+    <motion.section
+      id="about"
+      className="bg-gray-950 section-padding pt-12 pb-12"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0">
+          <motion.div
+            className="md:w-1/2 mb-8 md:mb-0"
+            variants={aboutVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <div className="relative overflow-hidden">
               <div className="absolute -top-8 -left-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-blue-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
               <div className="absolute -bottom-8 -right-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-green-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
-              <div className="bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-xl max-w-md mx-auto border border-gray-600 relative z-10">
+              <motion.div
+                className="bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-xl max-w-md mx-auto border border-gray-600 relative z-10"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              >
                 <h3 className="text-xl sm:text-2xl font-bold mb-6 text-blue-400">Why Work With Me?</h3>
-                <div className="space-y-6">
-                  <div className="flex items-start">
+                <motion.div
+                  className="space-y-6"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+                  }}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <motion.div variants={aboutVariants} className="flex items-start">
                     <div className="bg-blue-700 rounded-full mr-4">
                       <i className="fas fa-certificate text-blue-400 py-3 px-3"></i>
                     </div>
@@ -330,8 +518,8 @@ const About = () => {
                       <h4 className="font-bold text-gray-100 text-base sm:text-lg">Personalized Service</h4>
                       <p className="text-gray-300 text-md">I work closely with you to understand your needs and deliver customized solutions.</p>
                     </div>
-                  </div>
-                  <div className="flex items-start">
+                  </motion.div>
+                  <motion.div variants={aboutVariants} className="flex items-start">
                     <div className="bg-green-700 rounded-full mr-4">
                       <i className="fas fa-lightbulb text-green-400 py-3 px-3"></i>
                     </div>
@@ -339,8 +527,8 @@ const About = () => {
                       <h4 className="font-bold text-gray-100 text-base sm:text-lg">Modern Tools</h4>
                       <p className="text-gray-300 text-md">I use the latest technologies like React, Next.js, and Figma to create cutting-edge solutions.</p>
                     </div>
-                  </div>
-                  <div className="flex items-start">
+                  </motion.div>
+                  <motion.div variants={aboutVariants} className="flex items-start">
                     <div className="bg-purple-700 rounded-full mr-4">
                       <i className="fas fa-headset text-purple-400 py-3 px-3"></i>
                     </div>
@@ -348,12 +536,18 @@ const About = () => {
                       <h4 className="font-bold text-gray-100 text-base sm:text-lg">Dedicated Support</h4>
                       <p className="text-gray-300 text-md">I’m here to support you throughout the project with prompt communication.</p>
                     </div>
-                  </div>
-                </div>
-              </div>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
             </div>
-          </div>
-          <div className="md:w-1/2 md:pl-8 lg:pl-12">
+          </motion.div>
+          <motion.div
+            className="md:w-1/2 md:pl-8 lg:pl-12"
+            variants={aboutVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 text-blue-400">About Me</h2>
             <p className="text-gray-200 mb-6 text-base sm:text-lg md:text-xl">
               I’m a passionate freelancer starting my journey in the IT world, dedicated to delivering high-quality web development, UI/UX design, mobile apps, and custom dashboards. My goal is to help small businesses and individuals bring their ideas to life with affordable, modern solutions.
@@ -361,29 +555,49 @@ const About = () => {
             <p className="text-gray-200 mb-8 text-base sm:text-lg md:text-xl">
               With a focus on client satisfaction, I strive to create tailored solutions that meet your unique needs, ensuring a seamless and collaborative experience.
             </p>
-            <div className="grid grid-cols-2 gap-4 sm:gap-6 mb-8">
-              <div className="bg-gray-800 p-4 rounded-xl border border-gray-600">
+            <motion.div
+              className="grid grid-cols-2 gap-4 sm:gap-6 mb-8"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+              }}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.div variants={aboutVariants} className="bg-gray-800 p-4 rounded-xl border border-gray-600">
                 <div className="text-2xl sm:text-3xl font-bold text-blue-400 mb-2">10+</div>
                 <div className="text-gray-300 text-md">Projects Completed</div>
-              </div>
-              <div className="bg-gray-800 p-4 rounded-xl border border-gray-600">
+              </motion.div>
+              <motion.div variants={aboutVariants} className="bg-gray-800 p-4 rounded-xl border border-gray-600">
                 <div className="text-2xl sm:text-3xl font-bold text-blue-400 mb-2">100%</div>
                 <div className="text-gray-300 text-md">Client Satisfaction</div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
             <h4 className="font-bold text-gray-100 mb-4 text-base sm:text-lg">Technologies I Use</h4>
-            <div className="flex flex-wrap gap-3 sm:gap-4">
+            <motion.div
+              className="flex flex-wrap gap-3 sm:gap-4"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+              }}
+              initial="hidden"
+              animate="visible"
+            >
               {technologies.map((tech, index) => (
-                <div key={index} className="bg-gray-800 py-2 px-4 rounded-lg flex items-center">
+                <motion.div
+                  key={index}
+                  variants={aboutVariants}
+                  className="bg-gray-800 py-2 px-4 rounded-lg flex items-center"
+                >
                   <i className={`${tech.icon} ${tech.color} mr-2 text-md`}></i>
                   <span className="text-gray-200 text-md">{tech.name}</span>
-                </div>
+                </motion.div>
               ))}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -428,18 +642,50 @@ const Portfolio = () => {
     },
   ];
 
+  // Animation variants for portfolio items
+  const portfolioVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
-    <section id="portfolio" className="bg-gray-900 section-padding pt-12 pb-12">
+    <motion.section
+      id="portfolio"
+      className="bg-gray-900 section-padding pt-12 pb-12"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 sm:mb-16">
+        <motion.div
+          className="text-center mb-12 sm:mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 text-blue-400">My Portfolio</h2>
           <p className="text-gray-300 max-w-3xl mx-auto text-base sm:text-lg md:text-xl">
             Check out some of my recent projects that showcase my skills in web development, UI/UX design, and more.
           </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        </motion.div>
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+          }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {portfolioItems.map((item) => (
-            <div key={item.id} className="bg-gray-800 rounded-3xl overflow-hidden shadow-xl card-hover border border-gray-600 transform hover:scale-105 transition duration-300">
+            <motion.div
+              key={item.id}
+              variants={portfolioVariants}
+              className="bg-gray-800 rounded-3xl overflow-hidden shadow-xl card-hover border border-gray-600 transform hover:scale-105 transition duration-300"
+            >
               <div className="h-40 sm:h-48 bg-gradient-to-r from-gray-700 to-gray-800 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-blue-500 opacity-20"></div>
                 <img src={item.imageurl} alt={item.title} className="z-10 object-cover w-full h-full max-w-full" />
@@ -447,20 +693,34 @@ const Portfolio = () => {
               <div className="p-4 sm:p-6">
                 <h3 className="text-lg sm:text-xl font-bold mb-2 text-gray-100">{item.title}</h3>
                 <p className="text-gray-300 mb-4 text-md">{item.category}</p>
-                <button className="bg-transparent hover:bg-blue-600 text-blue-400 hover:text-white font-semibold py-2 px-4 rounded-full border border-blue-400 hover:border-transparent transition duration-300 text-md">
+                <motion.button
+                  className="bg-transparent hover:bg-blue-600 text-blue-400 hover:text-white font-semibold py-2 px-4 rounded-full border border-blue-400 hover:border-transparent transition duration-300 text-md"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   View Details
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
-        <div className="text-center mt-8 sm:mt-12">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 sm:px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg text-md">
+        </motion.div>
+        <motion.div
+          className="text-center mt-8 sm:mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.button
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 sm:px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg text-md"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
             View All Projects
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -479,16 +739,56 @@ const Testimonials = () => {
     return stars;
   };
 
+  // Animation variants for testimonials
+  const testimonialVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
-    <section id="testimonials" className="bg-gray-950 section-padding pt-12 pb-12">
+    <motion.section
+      id="testimonials"
+      className="bg-gray-950 section-padding pt-12 pb-12"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 text-blue-400">What Clients Say</h2>
-        <p className="text-center text-gray-300 mb-8 sm:mb-12 max-w-2xl mx-auto text-base sm:text-lg md:text-xl">
+        <motion.h2
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 text-blue-400"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          What Clients Say
+        </motion.h2>
+        <motion.p
+          className="text-center text-gray-300 mb-8 sm:mb-12 max-w-2xl mx-auto text-base sm:text-lg md:text-xl"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           Hear from my clients about their experience working with me on their projects.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        </motion.p>
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+          }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="bg-gray-800 p-4 sm:p-6 rounded-3xl shadow-xl card-hover border border-gray-600 transform hover:scale-105 transition duration-300">
+            <motion.div
+              key={testimonial.id}
+              variants={testimonialVariants}
+              className="bg-gray-800 p-4 sm:p-6 rounded-3xl shadow-xl card-hover border border-gray-600 transform hover:scale-105 transition duration-300"
+            >
               <div className="flex items-center mb-4">
                 <div
                   className={`h-10 w-10 sm:h-12 sm:w-12 rounded-full ${testimonial.image === 'male' ? 'bg-blue-700' : 'bg-pink-700'} flex items-center justify-center mr-4`}
@@ -504,11 +804,11 @@ const Testimonials = () => {
               </div>
               <p className="text-gray-200 mb-4 italic text-md">{testimonial.content}</p>
               <div className="flex">{getStarRating(testimonial.rating)}</div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -526,20 +826,54 @@ const Contact = () => {
     setFormData({ name: '', email: '', message: '' });
   };
 
+  // Animation variants for contact content
+  const contactVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+  };
+
   return (
-    <section id="contact" className="bg-gray-900 section-padding pt-12 pb-12">
+    <motion.section
+      id="contact"
+      className="bg-gray-900 section-padding pt-12 pb-12"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-8 sm:mb-12 text-blue-400">
+        <motion.h2
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-8 sm:mb-12 text-blue-400"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           Get In Touch
-        </h2>
+        </motion.h2>
         <div className="flex flex-col md:flex-row">
           {/* Left side - Form */}
-          <div className="md:w-1/2 mb-8 md:mb-0">
-            <div className="bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-xl max-w-md mx-auto border border-gray-600">
+          <motion.div
+            className="md:w-1/2 mb-8 md:mb-0"
+            variants={contactVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.div
+              className="bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-xl max-w-md mx-auto border border-gray-600"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+            >
               <h3 className="text-xl sm:text-2xl font-bold mb-6 text-gray-100">
                 Send Me a Message
               </h3>
-              <div className="mb-4">
+              <motion.div
+                className="mb-4"
+                variants={contactVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 <label className="block text-gray-200 mb-2 text-md" htmlFor="name">
                   Name
                 </label>
@@ -552,8 +886,13 @@ const Contact = () => {
                   className="w-full px-4 py-3 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 text-md"
                   required
                 />
-              </div>
-              <div className="mb-4">
+              </motion.div>
+              <motion.div
+                className="mb-4"
+                variants={contactVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 <label className="block text-gray-200 mb-2 text-md" htmlFor="email">
                   Email
                 </label>
@@ -566,8 +905,13 @@ const Contact = () => {
                   className="w-full px-4 py-3 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 text-md"
                   required
                 />
-              </div>
-              <div className="mb-6">
+              </motion.div>
+              <motion.div
+                className="mb-6"
+                variants={contactVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 <label className="block text-gray-200 mb-2 text-md" htmlFor="message">
                   Message
                 </label>
@@ -580,25 +924,40 @@ const Contact = () => {
                   className="w-full px-4 py-3 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 text-md"
                   required
                 ></textarea>
-              </div>
-              <button
+              </motion.div>
+              <motion.button
                 onClick={handleSubmit}
                 className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full w-full transition duration-300 shadow-lg text-md"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
                 Send Message
-              </button>
-            </div>
-          </div>
+              </motion.button>
+            </motion.div>
+          </motion.div>
 
           {/* Right side - Contact Info */}
-          <div className="md:w-1/2 md:pl-8 lg:pl-12">
+          <motion.div
+            className="md:w-1/2 md:pl-8 lg:pl-12"
+            variants={contactVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <div className="max-w-md mx-auto">
               <h3 className="text-xl sm:text-2xl font-bold mb-6 text-gray-100">
                 Contact Information
               </h3>
-              <div className="space-y-6">
-                {/* Location */}
-                <div className="flex items-start">
+              <motion.div
+                className="space-y-6"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+                }}
+                initial="hidden"
+                animate="visible"
+              >
+                <motion.div variants={contactVariants} className="flex items-start">
                   <div className="bg-blue-700 rounded-full mr-4">
                     <i className="fas fa-map-marker-alt text-blue-400 px-3 py-3"></i>
                   </div>
@@ -606,9 +965,8 @@ const Contact = () => {
                     <h4 className="font-bold text-gray-100 text-base sm:text-lg">Location</h4>
                     <p className="text-gray-200 text-md">Ahmedabad, Gujarat, India</p>
                   </div>
-                </div>
-                {/* Phone */}
-                <div className="flex items-start">
+                </motion.div>
+                <motion.div variants={contactVariants} className="flex items-start">
                   <div className="bg-green-700 rounded-full mr-4">
                     <i className="fas fa-phone text-green-400 px-3 py-3"></i>
                   </div>
@@ -621,9 +979,8 @@ const Contact = () => {
                       +91 96647 57686
                     </a>
                   </div>
-                </div>
-                {/* Email */}
-                <div className="flex items-start">
+                </motion.div>
+                <motion.div variants={contactVariants} className="flex items-start">
                   <div className="bg-purple-700 rounded-full mr-4">
                     <i className="fas fa-envelope text-purple-400 px-3 py-3"></i>
                   </div>
@@ -636,54 +993,79 @@ const Contact = () => {
                       kyarisesolutions@gmail.com
                     </a>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* Social Icons */}
-              <div className="mt-8">
+              <motion.div
+                className="mt-8"
+                variants={contactVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 <h4 className="font-bold text-gray-100 mb-4 text-base sm:text-lg">
                   Follow Me
                 </h4>
-                <div className="flex space-x-4">
-                  <a
+                <motion.div
+                  className="flex space-x-4"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+                  }}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <motion.a
                     href="https://github.com/kyarisesolutions"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gray-800 text-white rounded-full hover:bg-gray-900 transition duration-300"
+                    variants={contactVariants}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <i className="fab fa-github text-md"></i>
-                  </a>
-                  <a
+                  </motion.a>
+                  <motion.a
                     href="https://wa.me/919664757686"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-green-400 text-white rounded-full hover:bg-green-500 transition duration-300"
+                    variants={contactVariants}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <i className="fab fa-whatsapp text-md"></i>
-                  </a>
-                  <a
+                  </motion.a>
+                  <motion.a
                     href="https://www.instagram.com/kyarisesolutions/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition duration-300"
+                    variants={contactVariants}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <i className="fab fa-instagram text-md"></i>
-                  </a>
-                  <a
+                  </motion.a>
+                  <motion.a
                     href="https://linkedin.com/vishaljadav"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-blue-700 text-white rounded-full hover:bg-blue-800 transition duration-300"
+                    variants={contactVariants}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <i className="fab fa-linkedin-in text-md"></i>
-                  </a>
-                </div>
-              </div>
+                  </motion.a>
+                </motion.div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -700,60 +1082,150 @@ const Footer = ({ setActiveSection }) => {
     }
   };
 
+  // Animation variants for footer content
+  const footerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
-    <footer className="bg-gray-950 text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+    <motion.footer
+      className="bg-gray-950 text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-2">
-          <div className="mb-8 md:mb-0">
+          <motion.div
+            className="mb-8 md:mb-0"
+            variants={footerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <div className="flex items-center mb-4">
-              <img src="/logo.png" alt="Logo" className="h-12 w-32 sm:h-14 sm:w-36 mr-2" />
+              <motion.img
+                src="/logo.png"
+                alt="Logo"
+                className="h-12 w-32 sm:h-14 sm:w-36 mr-2"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+              />
             </div>
             <p className="text-gray-200 max-w-xs mb-4 text-md">
               A passionate freelancer delivering affordable IT solutions to help you succeed online.
             </p>
-            <div className="flex space-x-4">
-              <a href="https://github.com/kyarisesolutions" className="text-gray-200 hover:text-blue-400 transition-colors duration-300 text-md">
+            <motion.div
+              className="flex space-x-4"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+              }}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.a
+                href="https://github.com/kyarisesolutions"
+                className="text-gray-200 hover:text-blue-400 transition-colors duration-300 text-md"
+                variants={footerVariants}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
                 <i className="fab fa-github"></i>
-              </a>
-              <a href="https://wa.me/919664757686" className="text-gray-200 hover:text-blue-400 transition-colors duration-300 text-md">
+              </motion.a>
+              <motion.a
+                href="https://wa.me/919664757686"
+                className="text-gray-200 hover:text-blue-400 transition-colors duration-300 text-md"
+                variants={footerVariants}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
                 <i className="fab fa-whatsapp"></i>
-              </a>
-              <a href="https://www.instagram.com/kyarisesolutions/" className="text-gray-200 hover:text-blue-400 transition-colors duration-300 text-md">
+              </motion.a>
+              <motion.a
+                href="https://www.instagram.com/kyarisesolutions/"
+                className="text-gray-200 hover:text-blue-400 transition-colors duration-300 text-md"
+                variants={footerVariants}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
                 <i className="fab fa-instagram"></i>
-              </a>
-              <a href="https://linkedin.com/vishaljadav" className="text-gray-200 hover:text-blue-400 transition-colors duration-300 text-md">
+              </motion.a>
+              <motion.a
+                href="https://linkedin.com/vishaljadav"
+                className="text-gray-200 hover:text-blue-400 transition-colors duration-300 text-md"
+                variants={footerVariants}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
                 <i className="fab fa-linkedin-in"></i>
-              </a>
-            </div>
-          </div>
-          <div className="mb-8 md:mb-0">
+              </motion.a>
+            </motion.div>
+          </motion.div>
+          <motion.div
+            className="mb-8 md:mb-0"
+            variants={footerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <h4 className="text-lg font-bold mb-4 text-gray-100">Quick Links</h4>
-            <ul className="space-y-2">
+            <motion.ul
+              className="space-y-2"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+              }}
+              initial="hidden"
+              animate="visible"
+            >
               {['home', 'services', 'about', 'portfolio', 'testimonials', 'contact'].map((item) => (
-                <li key={item}>
+                <motion.li key={item} variants={footerVariants}>
                   <button
                     onClick={() => handleNavClick(item)}
                     className="text-gray-200 hover:text-blue-400 capitalize transition-colors duration-300 text-md"
                   >
                     {item}
                   </button>
-                </li>
+                </motion.li>
               ))}
-            </ul>
-          </div>
-          <div className="mb-8 md:mb-0">
+            </motion.ul>
+          </motion.div>
+          <motion.div
+            className="mb-8 md:mb-0"
+            variants={footerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <h4 className="text-lg font-bold mb-4 text-gray-100">Services</h4>
-            <ul className="space-y-2">
+            <motion.ul
+              className="space-y-2"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+              }}
+              initial="hidden"
+              animate="visible"
+            >
               {services.slice(0, 4).map((service) => (
-                <li key={service.id}>
+                <motion.li key={service.id} variants={footerVariants}>
                   <button className="text-gray-200 hover:text-blue-400 transition-colors duration-300 text-md">
                     {service.title}
                   </button>
-                </li>
+                </motion.li>
               ))}
-            </ul>
-          </div>
-          <div>
+            </motion.ul>
+          </motion.div>
+          <motion.div
+            variants={footerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <h4 className="text-lg font-bold mb-4 text-gray-100">Contact Info</h4>
             <p className="text-gray-200 mb-2 text-md">
               <i className="fas fa-map-marker-alt mr-2"></i> Ahmedabad, Gujarat
@@ -764,15 +1236,21 @@ const Footer = ({ setActiveSection }) => {
             <p className="text-gray-200 text-md">
               <i className="fas fa-envelope mr-2"></i> <a href='mailto:kyarisesolutions@gmail.com'>kyarisesolutions@gmail.com</a>
             </p>
-          </div>
+          </motion.div>
         </div>
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+        <motion.div
+          className="border-t border-gray-800 mt-8 pt-8 text-center"
+          variants={footerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           <p className="text-gray-200 text-md">
             &copy; 2025 kyarisesolutions. All rights reserved.
           </p>
-        </div>
+        </motion.div>
       </div>
-    </footer>
+    </motion.footer>
   );
 };
 
