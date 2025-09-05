@@ -496,7 +496,7 @@ const About = () => {
               <div className="absolute -top-8 -left-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-blue-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
               <div className="absolute -bottom-8 -right-8 w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40 bg-green-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
               <motion.div
-                className="bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-xl max-w-md mx-auto border border-gray-600 relative z-10"
+                className="bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-xl max-w-md mx-auto relative z-10"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               >
